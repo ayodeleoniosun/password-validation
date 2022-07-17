@@ -1,101 +1,147 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="../dist/app.css" rel="stylesheet">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="../dist/app.css" rel="stylesheet" />
     <script src="../dist/app.js" defer></script>
-</head>
-<body>
-<div x-data="validate_password" class="min-h-full flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-    <div class="sm:mx-auto sm:w-full sm:max-w-md">
-        <img class="mx-auto h-12 w-auto" src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
-             alt="Workflow">
-        <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">Create a new account</h2>
-    </div>
+  </head>
+  <body>
+    <div
+      x-data="validate_password"
+      class="flex min-h-full flex-col justify-center py-12 sm:px-6 lg:px-8"
+    >
+      <div class="sm:mx-auto sm:w-full sm:max-w-md">
+        <img
+          class="mx-auto h-12 w-auto"
+          src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
+          alt="Workflow"
+        />
+        <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          Create a new account
+        </h2>
+      </div>
 
-    <div class="sm:mx-auto sm:w-full sm:max-w-md">
+      <div class="sm:mx-auto sm:w-full sm:max-w-md">
         <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-            <form class="space-y-6" action="#" method="POST" @submit.prevent="">
-                <div>
-                    <label for="email" class="block text-sm font-medium text-gray-700"> Email address </label>
-                    <div class="mt-1">
-                        <input id="email" name="email" type="email" autocomplete="email" required
-                               class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+          <form class="space-y-6" action="#" method="POST" @submit.prevent="">
+            <div>
+              <label
+                for="email"
+                class="block text-sm font-medium text-gray-700"
+              >
+                Email address
+              </label>
+              <div class="mt-1">
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  autocomplete="email"
+                  required
+                  class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label
+                for="password"
+                class="block text-sm font-medium text-gray-700"
+              >
+                Password
+              </label>
+              <div class="mt-1">
+                <input
+                  id="password"
+                  x-model="password"
+                  name="password"
+                  type="password"
+                  required
+                  @keyup="validatePassword"
+                  class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label
+                for="password_confirmation"
+                class="block text-sm font-medium text-gray-700"
+              >
+                Password Confirmation
+              </label>
+              <div class="mt-1">
+                <input
+                  id="password_confirmation"
+                  x-model="password_confirmation"
+                  name="password_confirmation"
+                  type="password"
+                  @keyup="validatePassword"
+                  required
+                  class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                />
+              </div>
+            </div>
+
+            <template x-if="isTyping">
+              <ul>
+                <template x-for="(rule, index) in passwordRules">
+                  <li
+                    class="mb-1 flex text-base"
+                    :class="rule.validated ? 'text-success' : 'text-error'"
+                  >
+                    <div>
+                      <span
+                        class="absolute mt-1 rounded border-2 border-solid"
+                        :class="rule.validated? 'border-success p-1' : 'border-error'"
+                      >
+                        <img
+                          :src="rule.validated ? 'svg/check.svg' : 'svg/cancel.svg'"
+                        />
+                      </span>
                     </div>
-                </div>
-
-                <div>
-                    <label for="password" class="block text-sm font-medium text-gray-700"> Password </label>
-                    <div class="mt-1">
-                        <input id="password" x-model="password" name="password" type="password" required
-                               @keyup="validatePassword"
-                               class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                    </div>
-                </div>
-
-                <div>
-                    <label for="password_confirmation" class="block text-sm font-medium text-gray-700"> Password
-                        Confirmation </label>
-                    <div class="mt-1">
-                        <input id="password_confirmation" x-model="password_confirmation" name="password_confirmation"
-                               type="password"
-                               @keyup="validatePassword"
-                               required
-                               class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                    </div>
-                </div>
-
-                <template x-if="isTyping">
-                    <ul>
-                        <template x-for="(rule, index) in passwordRules">
-                            <li class="flex mb-1 text-base"
-                                :class="rule.validated ? 'text-success' : 'text-error'">
-
-                                <div>
-                                    <span class="absolute mt-1 rounded border-2 border-solid"
-                                          :class="rule.validated? 'border-success p-1' : 'border-error'">
-                                    <img :src="rule.validated ? 'svg/check.svg' : 'svg/cancel.svg'"/>
-                                </div>
-                                <span x-text="rule.message" class="mx-7 font-normal"></span>
-                            </li>
-                        </template>
-                    </ul>
+                    <span x-text="rule.message" class="mx-7 font-normal"></span>
+                  </li>
                 </template>
+              </ul>
+            </template>
 
-                <div>
-                    <button type="submit"
-                            class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                        Sign up
-                    </button>
-                </div>
-            </form>
+            <div>
+              <button
+                type="submit"
+                class="flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              >
+                Sign up
+              </button>
+            </div>
+          </form>
         </div>
+      </div>
     </div>
-</div>
 
-<script>
-    document.addEventListener('alpine:init', () => {
-        Alpine.data('validate_password', () => ({
-            isTyping: false,
-            password: "",
-            password_confirmation: "",
-            passwordRules: {},
+    <script>
+      document.addEventListener("alpine:init", () => {
+        Alpine.data("validate_password", () => ({
+          isTyping: false,
+          password: "",
+          password_confirmation: "",
+          passwordRules: {},
 
-            validatePassword() {
-                this.isTyping = true;
+          validatePassword() {
+            this.isTyping = true;
 
-                const validation = this.$store.passwordValidation.validate(
-                    this.password,
-                    this.password_confirmation,
-                    this.$store.passwordValidation.rules,
-                );
+            const validation = this.$store.passwordValidation.validate(
+              this.password,
+              this.password_confirmation,
+              this.$store.passwordValidation.rules
+            );
 
-                this.passwordRules['strength'] = validation.strength;
-                this.passwordRules = validation.rules;
-            }
+            this.passwordRules["strength"] = validation.strength;
+            this.passwordRules = validation.rules;
+          },
         }));
-    });
-</script>
-</body>
+      });
+    </script>
+  </body>
 </html>
