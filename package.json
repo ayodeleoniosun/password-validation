@@ -1,8 +1,7 @@
 {
   "name": "password-validation",
   "scripts": {
-    "dev": "npm run development",
-    "development": "mix",
+    "prettier": "npx prettier --write src",
     "watch": "mix watch"
   },
   "devDependencies": {
