@@ -5,4 +5,4 @@ mix.js('src/app.js', 'dist')
         require('postcss-import'),
         require('tailwindcss'),
         require('autoprefixer'),
-    ]).setPublicPath('dist');
+    ]);
