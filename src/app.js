@@ -29,8 +29,6 @@ Alpine.store('passwordValidation', {
         },
     },
 
-    cloneRules: {},
-
     inputValidations(passwordRules) {
         let validationStatus = [];
         const excludeKeys = ['strength', 'others'];
@@ -46,7 +44,6 @@ Alpine.store('passwordValidation', {
 
     validate(password, password_confirmation = null, passwordRules) {
         let isBlank, isMatch;
-        console.log(password);
 
         if (password_confirmation == null) {
             isBlank = /^\s*$/.test(password);
@@ -61,7 +58,6 @@ Alpine.store('passwordValidation', {
         passwordRules['alpha']['validated'] = /[a-z].*[A-Z]|[A-Z].*[a-z]/.test(password);
         passwordRules['symbol']['validated'] = /[^a-zA-Z0-9]/.test(password);
         passwordRules['numeric']['validated'] = /\d/.test(password);
-        console.log(passwordRules['numeric']);
 
         return {
             strength: {
@@ -72,19 +68,6 @@ Alpine.store('passwordValidation', {
             rules: passwordRules,
         };
     },
-
-    strengthenPassword(passwordRules, clonePasswordRules) {
-        clonePasswordRules = Object.assign({}, passwordRules);
-        passwordRules = {};
-
-        passwordRules['strength'] = {
-            message: 'Password strength: strong',
-            strong: true,
-            validated: true
-        };
-
-        return {passwordRules, clonePasswordRules};
-    }
 })
 
 window.Alpine = Alpine
